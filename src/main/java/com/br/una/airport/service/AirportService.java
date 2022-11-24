@@ -4,6 +4,7 @@ import com.br.una.airport.dto.AirportResponseDTO;
 import com.br.una.airport.dto.AirportRequestDTO;
 import com.br.una.airport.entity.Airport;
 import com.br.una.airport.repository.AirportRepository;
+import com.br.una.airport.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class AirportService {
 
     public AirportResponseDTO findByIataCode(String iata) {
 
-        Airport airport = returnAiroportByIataCode(iata);
+        Airport airport = returnAirportByIataCode(iata);
 
         return new AirportResponseDTO(airport);
     }
@@ -37,7 +38,7 @@ public class AirportService {
 
     public AirportResponseDTO update(AirportRequestDTO airportDTO , String iata) {
 
-        Airport airportDataBase = returnAiroportByIataCode(iata);
+        Airport airportDataBase = returnAirportByIataCode(iata);
 
         updateAirport(airportDataBase , airportDTO);
 
@@ -53,8 +54,8 @@ public class AirportService {
         return "Airoport with iata code: "+iata+" was deleted!";
     }
 
-    private Airport returnAiroportByIataCode(String iata) {
-       return airportRepository.findByIataCode(iata);
+    private Airport returnAirportByIataCode(String iata) {
+       return airportRepository.findByIataCode(iata).orElseThrow(()-> new ResourceNotFoundException("Resource iata_code: "+iata+" not found"));
     }
 
     private Airport convertFromDTOToEntity(AirportRequestDTO airportDTO) {
@@ -84,6 +85,7 @@ public class AirportService {
         if(airportDTO.getIsoCountryCode()!=null) {
             airport.setIsoCountryCode(airportDTO.getIsoCountryCode());
         }
-        }
+
+    }
 
 }

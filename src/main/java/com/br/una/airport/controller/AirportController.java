@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 
@@ -37,7 +38,7 @@ public class AirportController {
    }
 
     @PostMapping
-    public ResponseEntity<AirportResponseDTO> save(@RequestBody AirportRequestDTO airportDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<AirportResponseDTO> save(@RequestBody @Valid AirportRequestDTO airportDTO, UriComponentsBuilder uriBuilder) {
 
        AirportResponseDTO airportResponseDTO = airportService.save(airportDTO);
 
